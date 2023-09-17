@@ -1,0 +1,16 @@
+@import "../../index.scss";
+
+.same-brand{
+    .text-center {
+        .d-flex {
+            h6 {
+                color: $gray;
+            }
+
+            h4 {
+                border-bottom: 4px solid $orang;
+                padding-bottom: 5px;
+            }
+        }
+    }
+}

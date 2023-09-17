@@ -1,0 +1,18 @@
+@import "../../index.scss";
+
+.search-display{
+    margin-top: 12rem;
+    margin-bottom: 6rem;
+    .text-center {
+        .d-flex {
+            h6 {
+                color: $gray;
+            }
+
+            h4 {
+                border-bottom: 4px solid $orang;
+                padding-bottom: 5px;
+            }
+        }
+    }
+}

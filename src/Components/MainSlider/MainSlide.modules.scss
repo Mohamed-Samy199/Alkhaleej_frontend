@@ -1,0 +1,40 @@
+@import "../../index.scss";
+
+.info {
+    .details {
+
+        h1,
+        h3 {
+            font-weight: bolder;
+            font-size: 40px;
+        }
+
+        transform: translate(27%, 30%);
+    }
+
+    .part-left {
+        left: -100%;
+        top: -85%;
+        z-index: -100;
+    }
+}
+
+.slick-arrow {
+    background-color: #1b0f23 !important;
+    visibility: hidden !important;
+    display: none !important;
+}
+
+.out-line-border {
+    border: 40px solid $orang;
+    border-radius: 5px;
+}
+
+.border-phone {
+    border: 8px solid $orang;
+    border-radius: 20px;
+    width: 240px !important;
+    top: 30%;
+    left: -20%;
+    z-index: 10;
+}

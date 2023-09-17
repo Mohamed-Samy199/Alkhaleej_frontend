@@ -1,0 +1,30 @@
+@import "../../index.scss";
+
+.brands {
+    .banner-one {
+        .col-md-3 {
+            background-color: $gray;
+            border-radius: 5px;
+        }
+    }
+    .display-brand {
+        margin-top: 6rem;
+        .brand-item {
+            .m-2 {
+                border: .5px solid $gray;
+            }
+        }
+    }
+}
+
+@media (max-width : 1000px) {
+    .banner-one {
+        .flex-nowrap {
+            flex-wrap: wrap !important;
+        }
+
+        .col-md-3 {
+            flex-direction: column;
+        }
+    }
+}

@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@300&family=Arimo:wght@400;500;600;700&family=Inconsolata:wght@500;600;800;900&family=Lobster&family=Montserrat:wght@300;400;500&family=Orbitron:wght@600&family=PT+Serif+Caption&family=PT+Serif:wght@400;700&family=Poppins:ital,wght@0,200;0,300;0,400;0,500;1,100;1,600&family=Roboto+Flex:opsz,wght@8..144,200;8..144,300;8..144,400;8..144,500;8..144,600;8..144,700&family=Roboto:wght@300;400;500;700;900&family=Rubik&family=Xanh+Mono&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    list-style: none;
+    box-sizing: border-box;
+    transition: all .5s linear;
+}
+
+$orang : #ff8503;
+$black : #1f2029;
+$light : #fff;
+$gray : #a5a2bb;
+
+:root {
+    --black: #1f2029;
+    --orange: #ff8503;
+    --dark: #1b0f23;
+    --light: #fff;
+}
+
+.light {
+    color: var(--light) !important;
+}
+
+.main-color {
+    color: $orang;
+}
+
+.main-bg {
+    background: $orang;
+}
+
+.secand-color {
+    background-color: #faa141;
+}
+
+.gray {
+    color: #a5a2bb;
+}
+
+.bg-gray {
+    background-color: $gray;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    background: url(./Components/Assets/bg.png) repeat;
+}
+
+::selection {
+    background-color: $orang;
+}
+
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+html::-webkit-scrollbar {
+    width: .8rem;
+    background-color: $black;
+}
+
+html::-webkit-scrollbar-thumb {
+    background-color: $orang;
+    border-radius: 10px;
+}
+
+html::-webkit-scrollbar-track {
+    background-color: $black;
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+    border: $orang;
+}
+
+input {
+    caret-color: $orang;
+    border: .2px solid $orang !important;
+}
+
+.row {
+    --bs-gutter-x: 0px !important;
+}
+
+.btn-orange {
+    background-color: $orang;
+    border: 2px solid $orang;
+    color: $light;
+    font-size: 1.25rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+
+    &:disabled {
+        color: $black;
+        border-color: $orang !important;
+        background-color: #faa141 !important;
+    }
+
+    &:hover {
+        border: 2px solid $orang;
+        color: $orang;
+    }
+}
+
+.Toastify__toast-theme--colored.Toastify__toast--success {
+    background: #ffc107 !important;
+}
