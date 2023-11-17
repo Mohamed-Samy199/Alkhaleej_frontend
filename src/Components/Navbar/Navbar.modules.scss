@@ -2,7 +2,10 @@
 
 .navbar {
     background-color: $orang;
-
+    .admin{
+        background-color: transparent !important;
+        border: none !important;
+    }
     .offcanvas-header {
         background-color: $orang !important;
     }
@@ -103,6 +106,19 @@
             span {
                 left: 10% !important;
             }
+        }
+        .search-nav{
+            display: none !important;
+        }
+    }
+}
+@media (max-width : 380px) {
+    .navbar-component {
+        .logout{
+            margin-bottom: 10px;
+        }
+        .navbar-brand{
+            font-size: 18px !important;
         }
     }
 }

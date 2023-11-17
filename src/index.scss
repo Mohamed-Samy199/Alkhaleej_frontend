@@ -47,6 +47,9 @@ $gray : #a5a2bb;
     background-color: $gray;
 }
 
+.fs{
+    font-size: 18px;
+}
 body {
     font-family: 'Poppins', sans-serif;
     width: 100%;
@@ -110,6 +113,19 @@ input {
     }
 }
 
+select option:focus {
+    background-color: #ff8503 !important; 
+    color: #fff;
+}
+
 .Toastify__toast-theme--colored.Toastify__toast--success {
     background: #ffc107 !important;
+}
+
+.network{
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9999;
+    background-color: #a5a2bb;
 }

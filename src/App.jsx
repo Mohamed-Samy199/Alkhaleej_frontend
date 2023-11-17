@@ -28,6 +28,11 @@ import Coupon from "./Components/Coupon/Coupon"
 import CouponDatails from "./Components/CouponDetails/CouponDatails"
 import NotFound from "./Components/404/404"
 import FilterCategory from "./Components/FilterCategory/FilterCategory"
+import ControlBoard from "./Components/ContorlBoard/ControlBoard"
+import CategoryManage from "./Components/AdminManage/CategoryManage/CategoryManage"
+import SubcategoryManage from "./Components/AdminManage/SubcategoryManage/SubcategoryManage"
+import ProductManage from "./Components/AdminManage/ProductManage/ProductManage"
+import BrandManage from "./Components/AdminManage/BrandManage/BrandManage"
 
 const App = () => {
 
@@ -37,7 +42,8 @@ const App = () => {
         let decodeToken = jwtDecode(encodeToken);
         setUserData(decodeToken)
     }
-    console.log(userData);
+    // console.log(localStorage.getItem('token'));
+    // console.log(userData);
     useEffect(() => {
         if (localStorage.getItem('token')) {
             saveUserData()
@@ -83,6 +89,12 @@ const App = () => {
                 { path: "review", element: <ProtectedRoute userData={userData}><Reviews /></ProtectedRoute> },
                 { path: "coupon", element: <ProtectedRoute userData={userData}><Coupon /></ProtectedRoute> },
                 { path: "offer", element: <ProtectedRoute userData={userData}><CouponDatails /></ProtectedRoute> },
+                { path: "control_board", element: <ProtectedRoute userData={userData}><ControlBoard /></ProtectedRoute> , children:[
+                    {index : true , element : <CategoryManage/>},
+                    {path : "subcategoey_manage" , element : <SubcategoryManage/>},
+                    {path : "product_manage" , element : <ProductManage/>},
+                    {path : "brand_manage" , element : <BrandManage/>},
+                ] },
                 { path: "*", element: <NotFound /> }
             ]
         }

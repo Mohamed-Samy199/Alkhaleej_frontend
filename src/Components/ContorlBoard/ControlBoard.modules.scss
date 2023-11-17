@@ -1,0 +1,15 @@
+.control-board{
+    .row{
+        .text-capitalize{
+            a{
+                background-color: #fff;
+                &:hover{
+                    background-color: #e2e2e2;
+                }
+            }
+        }
+    }
+    a.active{
+        background-color: #e2e2e2;
+    }
+}

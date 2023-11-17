@@ -1,14 +1,20 @@
 import { Outlet } from "react-router-dom"
 import Navbar from "../Navbar/Navbar"
 import Footer from "../Footer/Footer"
+import { Offline } from "react-detect-offline";
 
-const MainLayout = ({userData , logout}) => {
+const MainLayout = ({ userData, logout }) => {
     return (
         <div>
             <Navbar userData={userData} logout={logout} />
             <div>
-                <Outlet/>
+                <Outlet />
             </div>
+            <Offline>
+                <div className="network px-5 py-3">
+                    <i className="fas fa-wifi"></i> you are offline!
+                </div>
+            </Offline>
             <Footer />
         </div>
     )

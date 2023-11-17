@@ -4,6 +4,7 @@ import { Fragment, useContext, useState } from "react";
 import { CategoryContext } from "../Context/CategoryContext/Category";
 import './Navbar.modules.scss';
 import { toast } from "react-toastify";
+import Dropdown from 'react-bootstrap/Dropdown';
 import { Col, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 
 
@@ -45,18 +46,39 @@ const Navbar = ({ userData, logout }) => {
                             <li className="nav-item">
                                 <NavLink className="nav-link light" aria-current="page" to="/">Home</NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link light" onClick={() => setModel(true)}>Deliver to Cairo</NavLink>
-                            </li>
+
+                            {
+                                userData ?
+                                    (userData.role === "User" ?
+                                        (<li className="nav-item">
+                                            <NavLink className="nav-link light" onClick={() => setModel(true)}>Deliver to Cairo</NavLink>
+                                        </li>) :
+                                        (<Dropdown>
+                                            <Dropdown.Toggle id="dropdown-basic" className="admin ps-0 pt-2" >
+                                                {userData.role}
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item  >
+                                                    <NavLink className="nav-link" to="/control_board">Control Board</NavLink>
+                                                </Dropdown.Item>
+
+                                            </Dropdown.Menu>
+                                        </Dropdown>)
+                                    ) :
+                                    (<li className="nav-item">
+                                        <NavLink className="nav-link light" onClick={() => setModel(true)}>Deliver to Cairo</NavLink>
+                                    </li>)
+                            }
                         </ul>
-                        <form className="d-flex w-100" role="search">
+                        <form className="d-flex w-100 search-nav" role="search">
                             <input className="form-control mx-2" type="search" placeholder="what are you look for?" aria-label="Search" />
                         </form>
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             {
                                 userData ? (
                                     <Fragment>
-                                        <li className="nav-item">
+                                        <li className="nav-item logout">
                                             <NavLink className="nav-link light" onClick={logout} style={{ width: "75px" }}>log out</NavLink>
                                         </li>
                                         <li className="nav-item move-item">

@@ -19,7 +19,7 @@ const MainSlider = () => {
         pauseOnHover: true
     };
     return (
-        <div>
+        <div className="main-slider">
             <div className="row ">
                 <div className="col-md-6 col-sm-12 position-relative">
                     <div className="info">
@@ -27,8 +27,8 @@ const MainSlider = () => {
                             <h1>POCO Store</h1>
                             <h3>multi-purpose</h3>
                             <h3><span className="main-color">Shopify</span> theme</h3>
-                            <p className="text-muted my-3 fs-5">An All-in-one template for your Shopify <br /> store to create different structures and <br />satisfy any specific requirements.</p>
-                            <button className="btn btn-orange my-3" onClick={() => navigate('/products')} >Buy Poco</button>
+                            <p className="text-muted my-3 fs-5 fs-small">An All-in-one template for your Shopify <br /> store to create different structures and <br />satisfy any specific requirements.</p>
+                            <button className="btn btn-orange mt-3 mb-5" onClick={() => navigate('/products')} >Buy Poco</button>
                         </div>
                         <div className="part-left position-absolute">
                             <img src={home} alt="home" className="w-75 h-75" />
@@ -36,7 +36,7 @@ const MainSlider = () => {
                     </div>
                 </div>
                 <div className="col-md-6 col-sm-12 my-3 position-relative">
-                    <div className="out-line-border shadow-lg m-3">
+                    <div className="out-line-border shadow-lg m-3 screan-slider">
                         <Slider {...settings}>
                             <div>
                                 <img src={h1} alt="home" className="w-100 h-100" />
@@ -52,7 +52,7 @@ const MainSlider = () => {
                             </div>
                         </Slider>
                     </div>
-                    <div className="shadow-lg border-phone position-absolute">
+                    <div className="shadow-lg border-phone position-absolute phone-slider">
                         <Slider {...settings}>
                             <div>
                                 <img src={h3} alt="home" className="rounded-3" />
