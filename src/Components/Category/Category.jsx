@@ -76,7 +76,7 @@ const Category = ({ userData }) => {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>{t("Alkhaleej Category")}</title>
-                <meta name="keywords" content="Category, alkhaleej category,  فئات , فئات الخليج" />
+                <meta name="keywords" content="Category, al-khaleejtools, alkhaleejtools, alkhaleej category,  فئات , فئات الخليج" />
                 <meta name="content" content="نهدف دائمًا لتوفير الحلول المثلى والمواد عالية الجودة لعملائنا. نسعى جاهدين لتلبية متطلباتهم وتجاوز توقعاتهم من خلال تقديم أفضل الأدوات والمعدات المتوفرة في السوق" />
             </Helmet>
             {

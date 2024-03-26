@@ -14,7 +14,7 @@ const Home = () => {
                 <meta charSet="utf-8" />
                 <title>{t("Alkhaleej Store")}</title>
                 <meta name="description" content="Alkhaleej Company for Supplying Construction Equipment and Tools. The company specializes in supplying all types of hand tools, all brands, and we are distinguished by our experience in supplying a comprehensive set of international tools that meet the needs of construction and industry." />
-                <meta name="keywords" content="الخليج, Alkhaleej Company, Alkhaleej, alkhaleej , alkhaleej product, منتاجات الخليج , موقع الخليج, ادوات البناء , العدد اليدوية, شركة الخليج" />
+                <meta name="keywords" content="الخليج, Alkhaleej Company, Alkhaleej, alkhaleej, al-khaleejtools, alkhaleejtools , alkhaleej product, منتاجات الخليج , موقع الخليج, ادوات البناء , العدد اليدوية, شركة الخليج" />
             </Helmet>
             <MainSlider />
             <div className="slide-show mt-2">

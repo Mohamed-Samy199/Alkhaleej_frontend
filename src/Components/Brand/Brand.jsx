@@ -58,7 +58,7 @@ const Brand = ({ userData }) => {
                 <meta charSet="utf-8" />
                 <title>{t("Brands")}</title>
                 <meta name="content" content="نقدم مجموعة واسعة ومتنوعة من العدد اليدوية بأعلى مستويات الجودة والتي تشمل ماركات مثل بوش، كينج توني، يونيور، انجكو، توتال، اي بي تي ، استانلي  وغيرها العديد من الماركات الرائدة في هذا المجال" />
-                <meta name="keywords" content="brand, alkhaleej brand, براند, براند الخليج" />
+                <meta name="keywords" content="brand, al-khaleejtools, alkhaleejtools, alkhaleej brand, براند, براند الخليج" />
             </Helmet>
             {
                 brands && brands?.length > 0 ? <Fragment>

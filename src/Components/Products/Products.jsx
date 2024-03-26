@@ -17,7 +17,7 @@ const Products = () => {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>{t("Alkhaleej Products")}</title>
-                <meta name="keywords" content="products, alkhaleej product,alkhaleej tools, منتجات الخليج, ادوات الخليج" />
+                <meta name="keywords" content="products, al-khaleejtools, alkhaleejtools, alkhaleej product,alkhaleej tools, منتجات الخليج, ادوات الخليج" />
                 <meta name="content" content="نهدف دائمًا لتوفير الحلول المثلى والمواد عالية الجودة لعملائنا. نسعى جاهدين لتلبية متطلباتهم وتجاوز توقعاتهم من خلال تقديم أفضل الأدوات والمعدات المتوفرة في السوق" />
             </Helmet>
             {
