@@ -1,15 +1,33 @@
-.control-board{
-    .row{
-        .text-capitalize{
-            a{
+.control-board {
+    .row {
+        .text-capitalize {
+            a {
                 background-color: #fff;
-                &:hover{
+
+                &:hover {
                     background-color: #e2e2e2;
                 }
+                
             }
         }
     }
-    a.active{
+
+    a:active {
         background-color: #e2e2e2;
+    }
+}
+
+@media (max-width : 990px) {
+    .control-board{
+        .mt-6{
+            margin-top: 6.2rem !important;
+        }
+    }
+}
+@media (max-width : 445px) {
+    .control-board{
+        .mt-6{
+            margin-top: 4.2rem !important;
+        }
     }
 }

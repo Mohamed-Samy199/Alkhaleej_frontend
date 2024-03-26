@@ -6,10 +6,13 @@ import { Fragment, useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { CategoryContext } from '../../Context/CategoryContext/Category';
 import { Helmet } from "react-helmet";
+import { baseUrl } from '../../../Utils/baseUrl';
 
 
 const BrandManage = () => {
-    const { categories } = useContext(CategoryContext);
+    const { categories, language, t , getAllBrand , setBrands , getAllCategories , setCategories} = useContext(CategoryContext);
+    const [loading , setLoading] = useState(false);
+
 
     let validationSchema = Yup.object({
         name: Yup.string().min(3).max(30).required(),
@@ -18,7 +21,7 @@ const BrandManage = () => {
     });
 
     const notify = (msg, type) => toast[type](msg);
-    const url = "http://localhost:5000/brand";
+    const url = `${baseUrl}/brand`;
     const headers = {
         "Content-Type": "multipart/form-data",
         "authorization": `Muhammad__${localStorage.getItem("token")}`
@@ -39,14 +42,20 @@ const BrandManage = () => {
         formData.append("categoryId", values.categoryId);
 
         try {
-            let data = await axios.post(url, formData, { headers });
+            setLoading(true);
+            let data = await axios.post(url, formData, {
+                headers
+            });
             if (data.status === 201) {
+                setLoading(false);
+                getAllBrand('brand', setBrands);
+                getAllCategories('category', setCategories);
                 toast.success('Brand Added Successfully', { duration: 2000, className: " text-white" });
             }
         } catch (error) {
-            console.log(error);
-            if (error.response.status === 400 || error.response.status === 500) {
-                notify(error.response.data.message, 'error')
+            if (error) {
+                setLoading(false);
+                notify(error.response.data.message, 'error');
             }
         }
     };
@@ -64,20 +73,20 @@ const BrandManage = () => {
         <div className="brand-manage my-4 mx-3">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Brand Manage</title>
+                <title>{t("Manage brands")}</title>
             </Helmet>
-            <div className="container">
-                <h3 className='text-capitalize gray'>add new Brand</h3>
+            <div className="container" dir={language === "ar" ? "rtl" : "ltr"}>
+                <h3 className='text-capitalize gray'>{t("add new Brand")}</h3>
                 <form onSubmit={registerFormik.handleSubmit}>
                     <div onClick={handleImageClick} style={{ cursor: "pointer" }}>
                         {selectedFile ? (
                             <img
                                 src={URL.createObjectURL(selectedFile)}
-                                alt="subcategory"
+                                alt="brand"
                                 style={{ width: "200px", height: "200px", objectFit: "cover" }}
                             />
                         ) : (
-                            <img src={upload} alt="subcategory" />
+                            <img src={upload} alt="brand" />
                         )}
                         <input
                             type="file"
@@ -97,18 +106,18 @@ const BrandManage = () => {
                         </div>
                     ) : null}
 
-                    <label htmlFor="categoryId" className='mb-3'>Choose a Category</label>
+                    <label htmlFor="categoryId" className='mb-3'>{t("Choose a Category")}</label>
                     <select
                         name="categoryId"
                         id="categoryId"
                         className='w-100 form-control'
-                        style={{ border: ".4px solid #ff8503", cursor: "pointer" }}
+                        style={{ border: ".4px solid #48BDCB", cursor: "pointer" }}
                         value={registerFormik.values.categoryId}
                         onChange={registerFormik.handleChange}
                         onBlur={registerFormik.handleBlur}
                     >
-                        <option value="select category">select category</option>
-                        {categories.length > 0 &&
+                        <option value="select category">{t("select category")}</option>
+                        {categories && categories?.length > 0 &&
                             categories.map((category) => (
                                 <Fragment key={category._id}>
                                     <option value={category._id}>{category.name}</option>
@@ -128,7 +137,7 @@ const BrandManage = () => {
                         onBlur={registerFormik.handleBlur}
                         id="name"
                         name="name"
-                        placeholder='brand name'
+                        placeholder={`${t("brand name")}`}
                         className="form-control my-3"
                     />
                     {registerFormik.errors.name && registerFormik.touched.name ? (
@@ -142,7 +151,10 @@ const BrandManage = () => {
                         className="btn btn-orange mt-3"
                         type="submit"
                     >
-                        Save Modifications
+                        {loading ?
+                            <div>{t("Uploading...")}  <i className="fas fa-spinner fa-spin"></i></div> :
+                            <div>{t("Save Modifications")}</div>
+                        }
                     </button>
                 </form>
             </div>

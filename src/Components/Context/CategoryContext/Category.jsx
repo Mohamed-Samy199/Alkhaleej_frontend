@@ -1,29 +1,101 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { baseUrl } from "../../../Utils/baseUrl";
+import { Navigate } from "react-router-dom";
 
 export let CategoryContext = createContext(null);
 
 export function CategoryContextProvider(props) {
+    const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+        "authorization": `Muhammad__${localStorage.getItem("token")}`
+    }
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [products, setProducts] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [payments, setPayments] = useState([]);
+
+
+    // language
+    const [language, setLanguage] = useState(localStorage.getItem("language") || "en");
+
+    const handleChangeLangauge = (lang) => {
+        setLanguage(lang);
+        localStorage.setItem("language", lang);
+    }
+
+    // local langauge 
+    const [t, seti18next] = useTranslation();
+    const [navPosition, setNavPosition] = useState("right"); // Default position is "right"
+
+    useEffect(() => {
+        seti18next.changeLanguage(language);
+
+        if (!localStorage.getItem("language")) {
+            localStorage.setItem("language", "en");
+        }
+
+        let rightOrLeft = localStorage.getItem("language") === "en" ? "right" : "left";
+        setNavPosition(rightOrLeft || "right");
+        // Perform other side effects here, if needed
+    }, [language, seti18next]);
 
     // category
     const getAllCategories = async (urlData, callback) => {
-        let { data } = await axios.get(`http://localhost:5000/${urlData}`);
+        let { data } = await axios.get(`${baseUrl}/${urlData}`);
         callback(data.category);
     }
     useEffect(() => {
         getAllCategories('category', setCategories);
         getAllCategories('brand', setBrands);
+        getAllCategories('product', setProducts);
+
+    }, []);
+
+    // admin -> users, payments
+    const getAllUsers = async (urlData, callback) => {
+        let { data } = await axios.get(`${baseUrl}/${urlData}`, { headers });
+        callback(data);
+    }
+    useEffect(() => {
+        getAllUsers('order', setPayments);
+        getAllUsers('auth', setUsers);
     }, [])
 
     // subcategry
-    let [subItems, setSubItems] = useState([])
+    let [subItems, setSubItems] = useState([]);
     const sendSubcategory = (e) => {
         setSubItems(e);
+    }
+    // delete subcategory
+    const handeleDeleteSubcategory = async (category, sub) => {
+        try {
+
+            const { data } = await axios.delete(`${baseUrl}/category/${category}/subcategory/${sub}`, { headers });
+            if (data.status === 200) {
+                toast.success("Product deleted", { duration: 3000 });
+                return true;
+            } else {
+                toast.error(data.message, { duration: 3000 });
+                return false;
+            }
+        } catch (error) {
+            toast.error(error.response.data.message, "error");
+        }
+    };
+    // delete review 
+    const handeleDeleteReviw = async (productId, reviewId) => {
+        try {
+            const data = await axios.delete(`${baseUrl}/product/review/${productId}/${reviewId}`, { headers });
+            if (data.status === 200) {
+                toast.success(data.data.message);
+            }
+        } catch (error) {
+            toast.error(error.response.data.message, "error");
+        }
     }
     // filter product
     let [subProds, setSubProd] = useState([])
@@ -32,7 +104,7 @@ export function CategoryContextProvider(props) {
     }
     // brand
     const getAllBrand = async (urlData, callback) => {
-        let { data } = await axios.get(`http://localhost:5000/${urlData}`);
+        let { data } = await axios.get(`${baseUrl}/${urlData}`);
         callback(data.brand);
     }
     useEffect(() => {
@@ -41,7 +113,7 @@ export function CategoryContextProvider(props) {
 
     // product
     const getAllProduct = async (urlData, callback) => {
-        let { data } = await axios.get(`http://localhost:5000/${urlData}`);
+        let { data } = await axios.get(`${baseUrl}/${urlData}`);
         callback(data.products);
     }
     useEffect(() => {
@@ -55,7 +127,7 @@ export function CategoryContextProvider(props) {
     }
     const nameFilterProducts = () => {
         if (search.length !== 0) {
-            return products.filter((e) => e.name.includes(search))
+            return products?.filter((e) => language === "en" ? e.name.toLowerCase().includes(search) : e.translations[language].includes(search))
         }
         return products;
     }
@@ -65,6 +137,22 @@ export function CategoryContextProvider(props) {
     const filterProd = (e) => {
         setfilterProdCategory(e)
     }
+    // delete category, brand, product
+    const handeleDelete = async (product, id) => {
+        try {
+            const { data } = await axios.delete(`${baseUrl}/${product}/${id}`, { headers });
+            if (data.status === 200) {
+                // setProducts((prevProducts) => prevProducts.filter((product) => product._id !== productId));
+                toast.success("Product deleted", { duration: 3000 });
+                return true;
+            } else {
+                toast.error(data.message, { duration: 3000 });
+                return false;
+            }
+        } catch (error) {
+            toast.error(error.response.data.message, "error");
+        }
+    };
 
     // cart products
     const [userCartId, setUserCartId] = useState(null)
@@ -75,14 +163,11 @@ export function CategoryContextProvider(props) {
     const [numOfWishlist, setNumOfWishlist] = useState(0);
     const [wishlistProducts, setWishlistProducts] = useState([]);
 
-    const headers = {
-        "Content-Type": "application/json; charset=utf-8",
-        "authorization": `Muhammad__${localStorage.getItem("token")}`
-    }
+
     // cart
     let addProductCart = async (prodId) => {
         try {
-            let data = await axios.post("http://localhost:5000/cart", {
+            let data = await axios.post(`${baseUrl}/cart`, {
                 "productId": prodId
             }, {
                 headers
@@ -92,7 +177,7 @@ export function CategoryContextProvider(props) {
                 setNumOfCartItems(data.data.numOfCartItems)
                 setCartProducts(data.data.cart.products)
                 getCartProduct()
-                toast.success(data.data.message, { duration: 1000, className: " text-white" });
+                toast.success(data.data.message);
                 return true;
             } else {
                 toast.error(data.data.message, { duration: 1000, className: "bg-danger text-white" });
@@ -104,10 +189,9 @@ export function CategoryContextProvider(props) {
             }
         }
     }
-
     let getCartProduct = async () => {
         try {
-            let data = await axios.get("http://localhost:5000/cart", {
+            let data = await axios.get(`${baseUrl}/cart`, {
                 headers
             })
             if (data.status === 200) {
@@ -126,7 +210,7 @@ export function CategoryContextProvider(props) {
     }
     let removeCartItem = async (prodId) => {
         try {
-            let data = await axios.patch("http://localhost:5000/cart/remove", {
+            let data = await axios.patch(`${baseUrl}/cart/remove`, {
                 "productId": prodId,
             }, {
                 headers
@@ -153,7 +237,7 @@ export function CategoryContextProvider(props) {
     }
     let clearCartData = async (id) => {
         try {
-            let data = await axios.patch("http://localhost:5000/cart/clear", {
+            let data = await axios.patch(`${baseUrl}/cart/clear`, {
                 "userId": id
             },
                 {
@@ -182,10 +266,44 @@ export function CategoryContextProvider(props) {
             }
         }
     }
+    // update quntity
+    let updateCartQuantity = async (prodId, action) => {
+        try {
+            let data = await axios.patch(
+                `${baseUrl}/cart/update/${prodId}/${action}`,
+                {},
+                {
+                    headers,
+                }
+            );
+            console.log(data.data);
+            if (data.status === 200) {
+                getCartProduct()
+                toast.success('Quantity updated successfully.', {
+                    duration: 3000,
+                    className: 'text-white',
+                    iconTheme: {
+                        primary: '#fff',
+                        secondary: '#fff',
+                    },
+                });
+                return true;
+            } else {
+                toast.error(data.message, {
+                    duration: 3000,
+                    className: 'bg-danger text-white',
+                });
+                return false;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     // wishlist
     let addToWishlist = async (wishId) => {
         try {
-            let data = await axios.post(`http://localhost:5000/product/wishlist`, {
+            let data = await axios.post(`${baseUrl}/product/wishlist`, {
                 "productId": wishId
             }, {
                 headers
@@ -208,7 +326,7 @@ export function CategoryContextProvider(props) {
     }
     let removeFromWishlist = async (wishId) => {
         try {
-            let data = await axios.patch(`http://localhost:5000/product/wishlist/remove`, {
+            let data = await axios.patch(`${baseUrl}/product/wishlist/remove`, {
                 "productId": wishId
             }, {
                 headers
@@ -217,7 +335,7 @@ export function CategoryContextProvider(props) {
                 setNumOfWishlist(data.data.numOfCartItems)
                 setWishlistProducts(data.data.wishlist);
                 getWishlist();
-                toast.success("remove your liked", { duration: 3000, className: " text-success" });
+                toast.success("remove your liked", { duration: 3000, className: " text-white" });
                 return true
             } else {
                 toast.error(data.message, { duration: 3000, className: "text-white" });
@@ -231,7 +349,7 @@ export function CategoryContextProvider(props) {
     }
     let getWishlist = async () => {
         try {
-            let data = await axios.get("http://localhost:5000/product/wishlist/wishlist", {
+            let data = await axios.get(`${baseUrl}/product/wishlist/wishlist/wishlist`, {
                 headers
             })
             if (data.status === 200) {
@@ -243,11 +361,12 @@ export function CategoryContextProvider(props) {
             console.log(error);
         }
     }
+
     // coupon
     let [coupon, setCoupon] = useState(null)
     let getCoupon = async () => {
         try {
-            let data = await axios.get("http://localhost:5000/coupon", {
+            let data = await axios.get(`${baseUrl}/coupon`, {
                 headers
             })
             if (data.status === 200) {
@@ -260,23 +379,38 @@ export function CategoryContextProvider(props) {
 
     useEffect(() => {
         getCartProduct()
-    }, [])
+    }, []);
     useEffect(() => {
         getWishlist()
     }, [])
     useEffect(() => {
         getCoupon()
-    }, [])
+    }, []);
 
     return <CategoryContext.Provider value={{
         categories, setCategories,
         subItems, sendSubcategory,
         brands,
+        users,
+        payments,
         products, setProducts,
         search, searchProduct,
         nameFilterProducts,
         subProds, sendProduct,
         filterProdCategory, filterProd,
+        handeleDelete,
+        handeleDeleteSubcategory,
+        handeleDeleteReviw,
+
+        language,
+        handleChangeLangauge,
+        t, seti18next,
+        navPosition, setNavPosition,
+
+        getAllCategories,
+        setBrands,
+        getAllBrand,
+        getAllProduct,
 
         userCartId,
         cartId,
@@ -285,13 +419,16 @@ export function CategoryContextProvider(props) {
         removeCartItem,
         clearCartData,
         numOfCartItems,
+        getCartProduct,
+        updateCartQuantity,
+
+        coupon,
 
         numOfWishlist,
         wishlistProducts,
         addToWishlist,
         removeFromWishlist,
 
-        coupon
     }}>
         {props.children}
     </CategoryContext.Provider>

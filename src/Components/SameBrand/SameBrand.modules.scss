@@ -1,6 +1,6 @@
 @import "../../index.scss";
 
-.same-brand{
+.same-brand {
     .text-center {
         .d-flex {
             h6 {
@@ -11,6 +11,15 @@
                 border-bottom: 4px solid $orang;
                 padding-bottom: 5px;
             }
+        }
+    }
+}
+
+@media (max-width : 782px) {
+    .same-brand {
+        .row{
+            margin-right: 8px !important;
+            padding-top: 3rem !important;
         }
     }
 }

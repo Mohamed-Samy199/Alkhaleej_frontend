@@ -7,9 +7,10 @@ import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { CategoryContext } from '../../Context/CategoryContext/Category';
 import { Helmet } from 'react-helmet';
+import { baseUrl } from '../../../Utils/baseUrl';
 
 const ProductManage = () => {
-    const { categories, brands } = useContext(CategoryContext);
+    const { categories, brands, language, t , getAllProduct , setProducts} = useContext(CategoryContext);
     const inputRef = useRef(null);
     const inputImagesRef = useRef(null);
 
@@ -18,6 +19,7 @@ const ProductManage = () => {
 
     const [subCtgId, setSubCtgId] = useState([]);
     const [getSub, setGetSub] = useState([]);
+    const [loading , setLoading] = useState(false);
 
     let validationSchema = Yup.object({
         name: Yup.string().min(3).max(30).required(),
@@ -32,7 +34,7 @@ const ProductManage = () => {
         brandId: Yup.string().required(),
     });
     const notify = (msg, type) => toast[type](msg);
-    const url = "http://localhost:5000/product";
+    const url = `${baseUrl}/product`;
     const headers = {
         "Content-Type": "multipart/form-data",
         "authorization": `Muhammad__${localStorage.getItem("token")}`
@@ -52,11 +54,8 @@ const ProductManage = () => {
         setSelectedFiles(files);
     };
     const handleSubmit = async (values) => {
-        console.log(values);
-        const filterSub = subCtgId.find(id => id);
+        const filterSub = subCtgId && subCtgId?.find(id => id);
         const subcategoryId = filterSub._id;
-        const filterBrand = brands.find(brand => brand)
-        const brandId = filterBrand._id;
 
         const formData = new FormData();
         formData.append("name", values.name);
@@ -64,10 +63,9 @@ const ProductManage = () => {
         formData.append("price", values.price);
         formData.append("discount", values.discount);
         formData.append("description", values.description);
-
         formData.append("categoryId", values.categoryId);
         formData.append("subcategoryId", subcategoryId);
-        formData.append("brandId", brandId);
+        formData.append("brandId", values.brandId);
 
         formData.append("mainImage", selectedFile);
         selectedFiles.forEach((file) => {
@@ -75,13 +73,18 @@ const ProductManage = () => {
         });
 
         try {
-            let data = await axios.post(url, formData, { headers });
+            setLoading(true);
+            let data = await axios.post(url, formData, {
+                headers
+            });
             if (data.status === 201) {
+                setLoading(false);
+                getAllProduct('product', setProducts);
                 toast.success('Product Added Successfully', { duration: 2000, className: " text-white" });
             }
         } catch (error) {
-            console.log(error);
-            if (error.response.status === 400 || error.response.status === 500) {
+            if (error) {
+                setLoading(false);
                 notify(error.response.data.message, 'error')
             }
         }
@@ -104,10 +107,10 @@ const ProductManage = () => {
 
     const subFilter = (e) => {
         const categoryId = e.target.value;
-        const subcategories = categories.find(category => category._id === categoryId).subcategory
+        const subcategories = categories?.find(category => category._id === categoryId).subcategory
         setSubCtgId(subcategories);
 
-        const getSubCategories = subcategories.map(sub => sub.name)
+        const getSubCategories = subcategories?.map(sub => sub.name)
         setGetSub(getSubCategories)
     }
     useEffect(() => {
@@ -118,13 +121,13 @@ const ProductManage = () => {
         <div className="product-manage my-4 mx-3">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Product Manage</title>
+                <title>{t("Manage Products")}</title>
             </Helmet>
-            <div className="container">
-                <h3 className='text-capitalize gray'>add new Product</h3>
+            <div className="container" dir={language === "ar" ? "rtl" : "ltr"}>
+                <h3 className='text-capitalize gray'>{t("add new Product")}</h3>
                 <form onSubmit={registerFormik.handleSubmit}>
                     <div onClick={handleImageClick} style={{ cursor: "pointer" }}>
-                        <h5 className='text-muted'>select main image</h5>
+                        <h5 className='text-muted'>{t("select main image")}</h5>
                         {selectedFile ? (
                             <img
                                 src={URL.createObjectURL(selectedFile)}
@@ -153,8 +156,8 @@ const ProductManage = () => {
                     ) : null}
 
                     <div onClick={handleImagesClick} style={{ cursor: "pointer" }}>
-                        <h5 className='text-muted'>select sub image</h5>
-                        {selectedFiles.length > 0 ? (
+                        <h5 className='text-muted'>{t("select sub image")}</h5>
+                        {selectedFiles && selectedFiles?.length > 0 ? (
                             selectedFiles.map((file, index) => (
                                 <div key={index}>
                                     <img
@@ -186,7 +189,7 @@ const ProductManage = () => {
                         id="name"
                         name="name"
                         className="form-control my-3"
-                        placeholder='product name'
+                        placeholder={`${t("product name")}`}
                     />
                     {registerFormik.errors.name && registerFormik.touched.name ? (
                         <div className="alert alert-danger">
@@ -202,7 +205,7 @@ const ProductManage = () => {
                         id="stock"
                         name="stock"
                         className="form-control my-3"
-                        placeholder='stock'
+                        placeholder={`${t("stock")}`}
                     />
                     {registerFormik.errors.stock && registerFormik.touched.stock ? (
                         <div className="alert alert-danger">
@@ -218,7 +221,7 @@ const ProductManage = () => {
                         id="price"
                         name="price"
                         className="form-control my-3"
-                        placeholder='price'
+                        placeholder={`${t("price")}`}
                     />
                     {registerFormik.errors.price && registerFormik.touched.price ? (
                         <div className="alert alert-danger">
@@ -234,7 +237,7 @@ const ProductManage = () => {
                         id="discount"
                         name="discount"
                         className="form-control my-3"
-                        placeholder='discount'
+                        placeholder={`${t("discount")}`}
                     />
                     {registerFormik.errors.discount && registerFormik.touched.discount ? (
                         <div className="alert alert-danger">
@@ -246,7 +249,7 @@ const ProductManage = () => {
                         name="categoryId"
                         id="categoryId"
                         className='w-100 form-control text-muted'
-                        style={{ border: ".4px solid #ff8503", cursor: "pointer" }}
+                        style={{ border: ".4px solid #48BDCB", cursor: "pointer" }}
                         value={registerFormik.values.categoryId}
                         onChange={(e) => {
                             registerFormik.handleChange(e);
@@ -254,8 +257,8 @@ const ProductManage = () => {
                         }}
                         onBlur={registerFormik.handleBlur}
                     >
-                        <option value="select category">select category</option>
-                        {categories.length > 0 &&
+                        <option value="select category">{t("select category")}</option>
+                        {categories && categories.length > 0 &&
                             categories.map((category) => (
                                 <Fragment key={category._id}>
                                     <option value={category._id}>{category.name}</option>
@@ -272,13 +275,13 @@ const ProductManage = () => {
                         name="subcategoryId"
                         id="subcategoryId"
                         className='w-100 form-control text-muted my-3'
-                        style={{ border: ".4px solid #ff8503", cursor: "pointer" }}
+                        style={{ border: ".4px solid #48BDCB", cursor: "pointer" }}
                         value={registerFormik.values.subcategoryId}
                         onChange={registerFormik.handleChange}
                         onBlur={registerFormik.handleBlur}
                     >
-                        <option value="select category">select subcategory</option>
-                        {getSub.length > 0 &&
+                        <option value="select category">{t("select subcategory")}</option>
+                        {getSub && getSub.length > 0 &&
                             getSub.map((sub) => (
                                 <Fragment key={sub}>
                                     <option value={sub}>{sub}</option>
@@ -290,21 +293,20 @@ const ProductManage = () => {
                             {registerFormik.errors.subcategoryId}
                         </div>
                     ) : null}
-
                     <select
                         name="brandId"
                         id="brandId"
                         className='w-100 form-control text-muted'
-                        style={{ border: ".4px solid #ff8503", cursor: "pointer" }}
+                        style={{ border: ".4px solid #48BDCB", cursor: "pointer" }}
                         value={registerFormik.values.brandId}
                         onChange={registerFormik.handleChange}
                         onBlur={registerFormik.handleBlur}
                     >
-                        <option value="select category">select brand</option>
+                        <option value="select category">{t("select brand")}</option>
                         {brands && brands.length > 0 &&
                             brands.map((brand) => (
                                 <Fragment key={brand.name}>
-                                    <option value={brand.name}>{brand.name}</option>
+                                    <option value={brand._id}>{brand.name}</option>
                                 </Fragment>
                             ))}
                     </select>
@@ -318,11 +320,11 @@ const ProductManage = () => {
                         value={registerFormik.values.description}
                         onChange={registerFormik.handleChange}
                         onBlur={registerFormik.handleBlur}
-                        style={{ border: ".4px solid #ff8503" }}
+                        style={{ border: ".4px solid #48BDCB" }}
                         id="description"
                         name="description"
                         className="form-control my-3"
-                        placeholder='description' ></textarea>
+                        placeholder={`${t("description")}`} ></textarea>
                     {registerFormik.errors.description && registerFormik.touched.description ? (
                         <div className="alert alert-danger">
                             {registerFormik.errors.description}
@@ -334,7 +336,11 @@ const ProductManage = () => {
                         className="btn btn-orange mt-3"
                         type="submit"
                     >
-                        Save Modifications
+                        {loading ?
+                            <div>{t("Uploading...")}  <i className="fas fa-spinner fa-spin"></i></div> :
+                            <div>{t("Save Modifications")}</div>
+                        }
+
                     </button>
                 </form>
             </div>

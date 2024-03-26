@@ -1,15 +1,14 @@
 @import "../../index.scss";
 
-.product-details{
-    .image-sub , .image-main{
-        // background-color: $gray;
+.product-details {
+
+    .image-sub,
+    .image-main {
         border: 2px solid #999;
         border-radius: 5px;
+        object-fit: cover;
     }
-    .details-prod{
-        width: 38% !important;
-    
-    }
+
     .title-text {
         text-align: center;
         background-color: $orang;
@@ -19,29 +18,29 @@
         margin-top: 15px;
         margin-bottom: 30px;
     }
-    
+
     .container .skill-box {
         width: 100%;
         margin: 25px 0;
     }
-    
-    .skill-box .title{
+
+    .skill-box .title {
         display: block;
         font-size: 14px;
         font-weight: 600;
         color: #333;
         width: 54px;
     }
-    
-    .skill-box .skill-bar{
+
+    .skill-box .skill-bar {
         height: 14px;
         width: 100%;
         border-radius: 4px;
         margin-top: 6px;
-        background: rgba(0,0, 0, 0.1);
+        background: rgba(0, 0, 0, 0.1);
     }
-    
-    .skill-box .skill-per{
+
+    .skill-box .skill-per {
         position: relative;
         display: block;
         height: 100%;
@@ -51,42 +50,45 @@
         animation: progress 0.4s ease-in-out forwards;
         opacity: 0;
     }
-    
+
     .skill-per.four {
         // width: 80%;
         animation-delay: 0.1s;
     }
-    
-    .skill-per.three{
+
+    .skill-per.three {
         // width: 60%;
         animation-delay: 0.2s;
     }
-    .skill-per.two{
+
+    .skill-per.two {
         // width: 40%;
         animation-delay: 0.3s;
     }
-    .skill-per.one{
+
+    .skill-per.one {
         // width: 70%;
         animation-delay: 0.4s;
     }
-    .skill-per.expressjs{
+
+    .skill-per.expressjs {
         width: 75%;
         animation-delay: 0.5s;
     }
-    
-    
+
+
     @keyframes progress {
         0% {
             width: 0;
             opacity: 1;
         }
-    
+
         100% {
             opacity: 1;
         }
     }
-    
-    .skill-per .tooltip{
+
+    .skill-per .tooltip {
         position: absolute;
         right: -14px;
         top: -28px;
@@ -98,7 +100,7 @@
         background: $orang;
         z-index: 1;
     }
-    
+
     .tooltip::before {
         content: '';
         position: absolute;
@@ -111,9 +113,66 @@
         transform: translateX(-50%) rotate(45deg);
     }
 }
-@media (min-width: 992px){
+
+@media (min-width: 1275px) {
     .Reviews {
         flex: 0 0 auto;
         width: 17.666667% !important;
+    }
+}
+
+@media (min-width : 997px) and (max-width : 1275px) {
+    .details-prod {
+        transform: translateX(70px) !important;
+    }
+}
+
+@media (max-width: 782px) {
+    .product-details-top {
+        margin-top: 3rem !important;
+    }
+}
+
+@media (max-width: 729px) {
+    .product-details-top {
+        margin-top: 5rem !important;
+    }
+}
+
+@media (max-width: 347px) {
+    .product-details-top {
+        margin-top: 7rem !important;
+    }
+}
+
+@media (max-width : 990px) {
+    .product-details.mt-6 {
+        margin-top: 4.2rem !important;
+    }
+    .product-details{
+        .btn-orange {
+            font-size: 1rem;
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+        .w-100{
+            // width: 50% !important;
+        }
+    }
+}
+@media (max-width : 767px) {
+    .product-details-top{
+        overflow-x: auto;
+        .all-sub-images{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+    }
+}
+@media (max-width : 445px) {
+    .product-details.mt-6{
+        margin-top: 0rem !important;
     }
 }

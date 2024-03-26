@@ -1,6 +1,9 @@
 @import "../../index.scss";
 
 .products {
+    .translate-slider{
+        // transform: translateY(-3rem);
+    }
     .slider {
         .image-slide {
             width: 100%;
@@ -26,8 +29,8 @@
     }
 
     .display-products {
-        margin-bottom: 4rem;
-        margin-top: 8rem;
+        // margin-bottom: 4rem;
+        // margin-top: 8rem;
 
         .search {
             background-color: $gray;
@@ -50,6 +53,21 @@
                     padding-bottom: 5px;
                 }
             }
+        }
+    }
+}
+
+@media (max-width : 991px) {
+    .products {
+        .translate-slider {
+            margin-top: 7.2rem;
+        }
+    }
+}
+@media (max-width : 445px) {
+    .products {
+        .translate-slider {
+            margin-top: 5rem
         }
     }
 }

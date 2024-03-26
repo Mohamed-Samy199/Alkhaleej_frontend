@@ -2,10 +2,27 @@
 
 .navbar {
     background-color: $orang;
-    .admin{
+
+    .admin {
         background-color: transparent !important;
         border: none !important;
+        color: $black !important;
     }
+
+    .dropdown-nav {
+        &:hover {
+            color: $black !important;
+        }
+
+        &::after {
+            color: transparent !important;
+        }
+    }
+
+    .navbar-brand-logo {
+        transform: translateY(-25%);
+    }
+
     .offcanvas-header {
         background-color: $orang !important;
     }
@@ -31,6 +48,7 @@
 
     .box-details {
         right: -55rem;
+        bottom: 10%;
         z-index: 20 !important;
         transform: translateY(-45px);
         opacity: 0;
@@ -100,25 +118,135 @@
     }
 }
 
-@media (max-width : 526px) {
+
+
+@media (min-width : 567px) and (max-width : 679px) {
     .navbar-component {
+        .nav-show {
+            .secand-color {
+                .light {
+                    font-size: 18px !important;
+                    padding: 0 1px !important;
+                    margin-right: 10px !important;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width : 1250px) {
+    .navbar-component {
+        .subcategory-navbar {
+            display: none;
+            visibility: hidden;
+        }
+    }
+}
+
+@media (max-width : 991px) {
+    .navbar-component {
+        .brand-navbar {
+            display: none;
+            visibility: hidden;
+        }
+
+    }
+
+    .navbar-component {
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            /* Initially hidden */
+            width: 340px;
+            height: 100%;
+            background-color: #fff;
+            transition: all 0.3s ease;
+
+            .sidebar-toggle {
+                align-items: start !important;
+                flex-direction: column !important;
+                gap: 1rem;
+                margin-top: 1rem;
+                // transform: translateY(12%);
+
+                .ms-auto {
+                    margin-left: auto !important;
+                }
+
+                .me-auto {
+                    margin-right: auto !important;
+                }
+            }
+
+            .sidebar-toggle.flex-row-reverse {
+                align-items: end !important;
+            }
+        }
+
+        .sidebar.show-side {
+            left: 0;
+        }
+    }
+}
+
+// Extra Small Devices (Phones):
+
+@media (max-width : 566px) {
+    .navbar-component {
+        .box-details {
+            right: -50rem;
+        }
+
+        .nav-show {
+            .secand-color {
+                .light {
+                    font-size: 17px !important;
+                    padding: 0 1px !important;
+                    margin-right: 15px !important;
+                }
+            }
+        }
+
         .move-item {
             span {
                 left: 10% !important;
             }
         }
-        .search-nav{
+
+        .search-nav {
             display: none !important;
         }
     }
 }
-@media (max-width : 380px) {
+
+@media (max-width : 445px) {
+
     .navbar-component {
-        .logout{
-            margin-bottom: 10px;
+        .navbar-brand-logo {
+            height: 50px !important;
+            width: 100px !important;
+            transform: translateY(0%) !important;
+
+            img {
+                height: 100%;
+            }
         }
-        .navbar-brand{
-            font-size: 18px !important;
+
+        .navbar-toggler-show {
+            font-size: 16px !important;
+        }
+    }
+}
+
+@media (max-width : 360px) {
+    .navbar-component {
+        .sidebar {
+            width: 80vw !important;
+        }
+
+        .navbar-toggler-content {
+            width: 40% !important;
         }
     }
 }

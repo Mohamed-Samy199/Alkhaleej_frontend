@@ -1,12 +1,16 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from 'yup';
+import { baseUrl } from "../../Utils/baseUrl";
+import { CategoryContext } from "../Context/CategoryContext/Category";
 
 const Payment = () => {
+    const { t, language, getCartProduct } = useContext(CategoryContext);
+
     const [loading, setLoading] = useState(false);
     let validationSchema = Yup.object({
         address: Yup.string().required(),
@@ -16,7 +20,7 @@ const Payment = () => {
 
     })
     const notify = (msg, type) => toast[type](msg);
-    const url = "http://localhost:5000/order";
+    const url = `${baseUrl}/order`;
     let navigate = useNavigate();
     const headers = {
         "Content-Type": "application/json; charset=utf-8",
@@ -38,6 +42,7 @@ const Payment = () => {
                 })
                 if (data.status === 201) {
                     toast.success('Product Added to Payment Successfully', { duration: 2000, className: " text-white" });
+                    getCartProduct();
                     navigate('/orders');
                 }
             } catch (error) {
@@ -50,15 +55,15 @@ const Payment = () => {
         }
     })
     return (
-        <div className="payment-cash">
+        <div className="payment-cash mt-6">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Cash</title>
+                <title>{t("Cash")}</title>
             </Helmet>
-            <div className="w-50 my-5 mx-auto">
-                <h2 className="mb-4">Shipping Address</h2>
+            <div className="w-50 mx-auto pt-3" style={{ marginTop: "8rem" }} dir={language === "ar" ? "rtl" : "ltr"}>
+                <h2 className="mb-4">{t("Shipping Address")}</h2>
                 <form onSubmit={registerFormik.handleSubmit}>
-                    <label htmlFor="address">Details</label>
+                    <label htmlFor="address">{t("Details")}</label>
                     <input type="text" value={registerFormik.values.address}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="address" name="address" className="form-control my-3" />
@@ -68,7 +73,7 @@ const Payment = () => {
                         </div> : ''
                     }
 
-                    <label htmlFor="phone">Phone</label>
+                    <label htmlFor="phone">{t("Phone")}</label>
                     <input type="number" value={registerFormik.values.phone}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="phone" name="phone" className="form-control my-3" />
@@ -78,7 +83,7 @@ const Payment = () => {
                         </div> : ''
                     }
 
-                    <label htmlFor="city">City</label>
+                    <label htmlFor="city">{t("City")}</label>
                     <input type="text" value={registerFormik.values.city}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="city" name="city" className="form-control my-3" />
@@ -88,9 +93,9 @@ const Payment = () => {
                         </div> : ''
                     }
 
-                    <button disabled={!(registerFormik.dirty && registerFormik.isValid && !loading)} className="btn btn-orange">
-                        {!loading ? "Cash Payment" : <i className="fas fa-spinner fa-spin"></i>}
-                    </button>
+                    {/*<div disabled={!(registerFormik.dirty && registerFormik.isValid && !loading)} className="btn btn-orange" type="submit">
+                        {!loading ? `${t("Cash Payment")}` : <i className="fas fa-spinner fa-spin"></i>}
+                </div>*/}
                 </form>
             </div>
         </div>

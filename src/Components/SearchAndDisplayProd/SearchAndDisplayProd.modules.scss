@@ -1,8 +1,7 @@
 @import "../../index.scss";
 
-.search-display{
-    margin-top: 12rem;
-    margin-bottom: 6rem;
+.search-display {
+
     .text-center {
         .d-flex {
             h6 {
@@ -16,8 +15,9 @@
         }
     }
 }
+
 @media (max-width : 520px) {
-    .search-display{
+    .search-display {
         margin-top: 3rem;
     }
 }

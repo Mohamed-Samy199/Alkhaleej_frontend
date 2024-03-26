@@ -1,12 +1,15 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from 'yup';
+import { CategoryContext } from "../Context/CategoryContext/Category";
+import { baseUrl } from "../../Utils/baseUrl";
 
 const PaymentCart = () => {
+    const { t, language, getCartProduct } = useContext(CategoryContext);
     const [loading, setLoading] = useState(false);
     const validationSchema = Yup.object({
         address: Yup.string().required(),
@@ -15,7 +18,7 @@ const PaymentCart = () => {
     });
 
     const notify = (msg, type) => toast[type](msg);
-    const url = "http://localhost:5000/order/card";
+    const url = `${baseUrl}/order/card`;
     const navigate = useNavigate();
     const headers = {
         "Content-Type": "application/json; charset=utf-8",
@@ -29,6 +32,8 @@ const PaymentCart = () => {
             if (response.status === 201) {
                 toast.success('Product Added to Payment Successfully', { duration: 2000, className: " text-white" });
                 window.open(response.data.url);
+                getCartProduct();
+                navigate('/orders');
             }
         } catch (error) {
             if (error.response.status === 400 || error.response.status === 500) {
@@ -51,15 +56,15 @@ const PaymentCart = () => {
     });
 
     return (
-        <div className="payment-cash">
+        <div className="payment-cash mt-6">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Card</title>
+                <title>{t("Card")}</title>
             </Helmet>
-            <div className="w-50 my-5 mx-auto">
-                <h2 className="mb-4">Shipping Address card</h2>
+            <div className="w-50 mx-auto pt-3" dir={language === "ar" ? "rtl" : "ltr"}>
+                <h2 className="mb-4">{t("Shipping Address card")}</h2>
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="address">Details</label>
+                    <label htmlFor="address">{t("Details")}</label>
                     <input
                         type="text"
                         id="address"
@@ -75,7 +80,7 @@ const PaymentCart = () => {
                         </div>
                     )}
 
-                    <label htmlFor="phone">Phone</label>
+                    <label htmlFor="phone">{t("Phone")}</label>
                     <input
                         type="number"
                         id="phone"
@@ -91,7 +96,7 @@ const PaymentCart = () => {
                         </div>
                     )}
 
-                    <label htmlFor="city">City</label>
+                    <label htmlFor="city">{t("City")}</label>
                     <input
                         type="text"
                         id="city"
@@ -107,7 +112,7 @@ const PaymentCart = () => {
                         </div>
                     )}
 
-                    <label htmlFor="paymentType" className="d-none">Card</label>
+                    <label htmlFor="paymentType" className="d-none">{t("Card")}</label>
                     <input
                         type="text"
                         id="paymentType"
@@ -123,12 +128,12 @@ const PaymentCart = () => {
                         </div>
                     )}
 
-                    <button
+                    {/*<button
                         disabled={!(formik.dirty && formik.isValid && !loading)}
                         className="btn btn-orange"
                     >
-                        {!loading ? "Card Payment" : <i className="fas fa-spinner fa-spin"></i>}
-                    </button>
+                        {!loading ? `${t("Card Payment")}` : <i className="fas fa-spinner fa-spin"></i>}
+                    </button>*/}
                 </form>
             </div>
         </div>

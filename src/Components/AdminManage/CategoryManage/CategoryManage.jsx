@@ -2,18 +2,24 @@ import * as Yup from 'yup';
 import axios from "axios";
 import upload from "../../Assets/upload.png";
 import { useFormik } from "formik";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
+import { CategoryContext } from '../../Context/CategoryContext/Category';
+import { baseUrl } from '../../../Utils/baseUrl';
 
 const CategoryManage = () => {
+    const { t, language , setCategories , getAllCategories } = useContext(CategoryContext);
+    const [loading , setLoading] = useState(false);
+
+
     let validationSchema = Yup.object({
         name: Yup.string().min(3).max(30).required(),
         image: Yup.mixed().required(),
     });
 
     const notify = (msg, type) => toast[type](msg);
-    const url = "http://localhost:5000/category";
+    const url = `${baseUrl}/category`;
     const headers = {
         "Content-Type": "multipart/form-data",
         "authorization": `Muhammad__${localStorage.getItem("token")}`
@@ -36,14 +42,18 @@ const CategoryManage = () => {
         formData.append("image", selectedFile);
 
         try {
-            let data = await axios.post(url, formData, { headers });
-            console.log(data);
+            setLoading(true);
+            let data = await axios.post(url, formData, {
+                headers
+            });
             if (data.status === 201) {
+                setLoading(false);
+                getAllCategories('category', setCategories);
                 toast.success('Category Added Successfully', { duration: 2000, className: " text-white" });
             }
         } catch (error) {
-            console.log(error);
-            if (error.response.status === 400 || error.response.status === 500) {
+            if (error) {
+                setLoading(false);
                 notify(error.response.data.message, 'error')
             }
         }
@@ -59,13 +69,13 @@ const CategoryManage = () => {
 
     return (
         <div className="category-manage my-4 mx-3">
-        <Helmet>
+            <Helmet>
                 <meta charSet="utf-8" />
-                <title>Category Manage</title>
+                <title>{t("Category Manage")}</title>
             </Helmet>
             <div className="container">
-                <h3 className='text-capitalize gray'>add new category</h3>
-                <form onSubmit={registerFormik.handleSubmit}>
+                <h3 className='text-capitalize gray'></h3>
+                <form onSubmit={registerFormik.handleSubmit} dir={language === "ar" ? "rtl" : "ltr"} >
                     <div onClick={handleImageClick} style={{ cursor: "pointer" }}>
                         {selectedFile ? (
                             <img
@@ -101,7 +111,7 @@ const CategoryManage = () => {
                         onBlur={registerFormik.handleBlur}
                         id="name"
                         name="name"
-                        placeholder='category name'
+                        placeholder={`${t("category name")}`}
                         className="form-control my-3"
                     />
                     {registerFormik.errors.name && registerFormik.touched.name ? (
@@ -115,7 +125,12 @@ const CategoryManage = () => {
                         className="btn btn-orange mt-3"
                         type="submit"
                     >
-                        Save Modifications
+                    {
+                        loading ? 
+                        <div>{t("Uploading...")}  <i className="fas fa-spinner fa-spin"></i></div> :
+                        <div>{t("Save Modifications")}</div>
+                    }
+                        
                     </button>
                 </form>
             </div>

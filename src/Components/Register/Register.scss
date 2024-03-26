@@ -1,0 +1,53 @@
+.register {
+    .or-login {
+        bottom: -10%;
+        background-color: #fff;
+    }
+}
+
+@media (max-width : 990px) {
+
+    .register.mt-6,
+    .create-admin.mt-6,
+    .admin-page.mt-6,
+    .payments-page.mt-6,
+    .payment-cash.mt-6 {
+        margin-top: 6.2rem !important;
+    }
+
+    .create-admin,
+    .payment-cash {
+        .btn-orange {
+            font-size: 1rem;
+            padding-right: 1.3rem;
+            padding-left: 1.3rem;
+        }
+    }
+}
+
+@media (max-width : 445px) {
+
+    .register.mt-6,
+    .create-admin.mt-6,
+    .admin-page.mt-6,
+    .payments-page.mt-6,
+    .payment-cash.mt-6 {
+        margin-top: 4.2rem !important;
+    }
+
+    .register,
+    .create-admin,
+    .therd-part
+    .payment-cash {
+        .btn-orange {
+            font-size: 1rem;
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+    }
+
+    .accuont {
+        font-size: 18px;
+    }
+
+}

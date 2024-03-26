@@ -1,26 +1,41 @@
 @import "../../index.scss";
 
 .subcategory {
-    .slider {
-        .position-absolute {
-            width: 100%;
-            height: 44.5vh;
-            overflow: hidden;
-            background-color: rgba(0, 0, 0, .6);
-            top: 0;
-            left: 0;
-            right: 0;
-        }
-    }
 
     .filter-products {
         a {
             width: 250px;
-            background-color: #faa141;
+            background-color: #55c4c9;
 
             &:hover {
                 background-color: $orang;
             }
+        }
+    }
+}
+
+@media (max-width : 990px) {
+    .filter-products {
+        a {
+            width: 170px !important;
+        }
+        .p-4{
+            padding: 1rem !important;
+        }
+        .fs-5{
+            font-size: 1rem !important;
+        }
+    }
+    .subcategory{
+        .mt-6{
+            margin-top: 6.2rem !important;
+        }
+    }
+}
+@media (max-width : 445px) {
+    .subcategory{
+        .mt-6{
+            margin-top: 4.2rem !important;
         }
     }
 }

@@ -1,159 +1,164 @@
-import Slider from "react-slick";
 import { CategoryContext } from "../Context/CategoryContext/Category";
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useMemo } from "react";
 import "./Category.modules.scss";
 import TypeWriterEffect from "react-typewriter-effect";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import SlidesShow from "../SlidesShow/SlidesShow";
 
-const Category = () => {
-    const { categories, sendProduct } = useContext(CategoryContext);
-    let navigate = useNavigate()
-    let advertisements = [{
-        name: "supermarket",
-        i: "fa-solid fa-handshake-angle",
-        header: " Special Items",
-    }, {
-        name: "products",
-        i: "fa-solid fa-gift",
-        header: " Recommend Items",
-    }, {
-        name: "shopping",
-        i: "fa-solid fa-bag-shopping",
-        header: " Special Items",
-    }, {
-        name: "toys",
-        i: "fa-solid fa-baby",
-        header: "Enjoy with Toy",
-    }, {
-        name: "clothes",
-        i: "fa-solid fa-vest",
-        header: "Fashion Trends",
-    }, {
-        name: "mobile",
-        i: "fa-solid fa-mobile-screen-button",
-        header: " Smart Devices",
-    }, {
-        name: "Furniture",
-        i: "fa-solid fa-couch",
-        header: " 45% OFF",
-    }, {
-        name: "food",
-        i: "fa-solid fa-mortar-pestle",
-        header: "Yummy Meals",
-    },
-    ]
-    var settings = {
-        infinite: true,
-        slidesToShow: 6,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 2000,
-        pauseOnHover: true
+const Category = ({ userData }) => {
+    const { categories, sendProduct, handeleDelete, handeleDeleteSubcategory,
+        getAllCategories, setCategories, navPosition, language, t } = useContext(CategoryContext);
+    const deleteSubcategory = async (categoryId, subId) => {
+        await handeleDeleteSubcategory(categoryId, subId);
     };
+    const deleteCategory = async (id) => {
+        await handeleDelete("category", id);
+        getAllCategories('category', setCategories);
+    };
+
+    const renderSubcategories = useMemo(() => {
+        return categories && categories.map((category) => {
+            return (
+                <div key={category._id} className="my-2 position-relative" style={{ width: "98%" }}>
+                    {
+                        userData && userData.role === "Admin" ?
+                            <Fragment>
+                                <div className={`position-absolute ${navPosition === "right" ? "delete-item" : "delete-item-ar"}`} onClick={() => deleteCategory(category._id)}>
+                                    <i className="fa-solid fa-trash-can text-danger fs-3"></i>
+                                </div>
+                            </Fragment>
+                            : null
+                    }
+                    <h4 className="shadow-lg sub-shadow p-4 bg-white subcategory-alkhaleej" >
+                        {category.translations[language] === "en" ? `${category.name}` : `${category.translations[language]}`}
+                    </h4>
+
+                    <div className="shadow-lg d-flex justify-content-center align-items-center bg-white gap-2">
+
+                        {
+                            category && category.subcategory && category.subcategory.slice(0, 1).map((sub) => {
+
+                                return <div key={sub._id} className="position-relative">
+                                    {
+                                        userData && userData.role === "Admin" ?
+                                            <Fragment>
+                                                <div className="position-absolute delete-item" onClick={() => deleteSubcategory(category._id, sub._id)}>
+                                                    <i className="fa-solid fa-trash-can text-danger fs-3"></i>
+                                                </div>
+                                            </Fragment>
+                                            : null
+                                    }
+                                    <Link to="/filterCategory" className="nav-link d-flex justify-content-center align-items-center flex-column" key={sub._id} onClick={() => sendProduct(sub.product)} style={{ width: "340px" }} >
+
+                                        <div className="subcategory-alkhaleej mt-2 mx-2">
+                                            <img src={sub.image.secure_url} alt="subcategory alkhaleej" className="w-100" />
+                                        </div>
+                                        <p className="text-muted fw-bolder p-2 fs-5">
+                                            {sub.translations[language] === "en" ? `${sub.name}` : `${sub.translations[language]}`}
+                                        </p>
+                                    </Link>
+                                </div>
+
+                            })
+                        }
+
+
+                    </div>
+                </div>
+            );
+        });
+    }, [categories, language, userData]);
+
     return (
-        <div className="category">
+        <main className="alkhaleej category mt-5">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Category</title>
+                <title>{t("Alkhaleej Category")}</title>
+                <meta name="keywords" content="Category, alkhaleej category,  فئات , فئات الخليج" />
+                <meta name="content" content="نهدف دائمًا لتوفير الحلول المثلى والمواد عالية الجودة لعملائنا. نسعى جاهدين لتلبية متطلباتهم وتجاوز توقعاتهم من خلال تقديم أفضل الأدوات والمعدات المتوفرة في السوق" />
             </Helmet>
             {
                 categories && categories.length > 0 ? <Fragment>
-                    <div className="slider">
-                        <h3 className="fw-bolder ms-4 mt-3 d-flex justify-content-start">
-                            <span className="teal-color h1 me-2">Shop Popular Categories</span>
-                            <span className="none">
-                                <TypeWriterEffect
-                                    textStyle={{
-                                        fontFamily: "Red Hat Display",
-                                        color: "#8c89a0",
-                                    }}
-                                    startDelay={2000}
-                                    cursorColor="#8c89a0"
-                                    multiText={[
-                                        "Mobiles",
-                                        "Electronics",
-                                        "Men",
-                                        "Women",
-                                        "House",
-                                        "Health",
-                                        "Baby",
-                                        "Subermarket"
-                                    ]}
-                                    multiTextDelay={1000}
-                                    typeSpeed={30}
-                                    multiTextLoop
-                                />
-                            </span>
-                        </h3>
-                        <Slider {...settings}>
-                            {
-                                categories.map((category) => {
-                                    return <div key={category._id} className="text-center text-capitalize mb-5">
-                                        <img src={category.image.secure_url} className="w-100 py-2 px-4 rounded-circle" height={220} alt="category" />
-                                        <h6>{category.name}</h6>
-                                    </div>
-                                })
-                            }
-                        </Slider>
+                    <div className="alkhaleej slider pt-1 mt-6">
+                        <header>
+                            <h3 className="fw-bolder alkhaleej type-words mx-2 mt-4  d-flex justify-content-start" dir={language === "ar" ? "rtl" : "ltr"}>
+                                <span className="teal-color h1 mx-2">{t("Shop Popular")}</span>
+                                <span className="none">
+                                    <TypeWriterEffect
+                                        textStyle={{
+                                            fontFamily: "Red Hat Display",
+                                            color: "#8c89a0",
+                                        }}
+                                        startDelay={2000}
+                                        cursorColor="#8c89a0"
+                                        multiText={
+                                            categories && categories.map((category) => category.translations[language] === "en" ? category.name : category.translations[language])
+                                        }
+                                        multiTextDelay={1000}
+                                        typeSpeed={40}
+                                        multiTextLoop
+                                    />
+                                </span>
+                            </h3>
+                        </header>
+                        <div>
+                            <SlidesShow />
+                        </div>
                     </div>
-                    <div className="content-category text-capitalize my-5">
+                    <div className="alkhaleej content-category text-capitalize my-3">
                         <div className="container-fluid">
                             <div className="row">
-                                <div className="col-md-3 px-4">
-                                    <h4 className="pt-4">Advertisements</h4>
-                                    <div className="advertisements">
-                                        {
-                                            advertisements.map((adv, indx) => {
-                                                return <Fragment key={indx} >
-                                                    <div className="text-center p-3 main-bg text-white" >
-                                                        <h5><i className={adv.i}></i> {adv.header}</h5>
-                                                    </div>
-                                                    <div className="overlay position-relative mb-3">
-                                                        <img src={`https://source.unsplash.com/random/300x400/?${adv.name}`} className="w-100" alt="e-commerce" />
-                                                        <div className="position-absolute text-center">
-                                                            <div className="translate">
-                                                                <h5 className="text-white mt-5">price start from {Math.floor(Math.random() * 1000)} EGP</h5>
-                                                                <button className="btn btn-orange my-4" onClick={() => navigate("/products")}>shop now</button>
-                                                                <p className="text-white">{adv.name}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Fragment>
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                <div className="col-md-9 pe-lg-5">
-                                    <h4 className="py-4 fw-bolder">All Subcategories</h4>
-                                    {
-                                        categories.map((category) => {
-                                            return <div key={category._id} className="my-5">
-                                                <h4 className="shadow-lg sub-shadow p-4 bg-white">{category.name}</h4>
-                                                <div className="shadow-lg d-flex justify-content-center align-items-center bg-white">
+                                <div className="col-md-3 px-4 alkhaleej company" dir={language === "ar" ? "rtl" : "ltr"}>
+                                    <h4 className="p-2 fw-bolder">{t("Alkhaleej Company")}</h4>
 
-                                                    {
-                                                        category.subcategory.map((sub) => {
-                                                            return <Link to="/filterCategory" className="nav-link" key={sub._id} onClick={() => sendProduct(sub.product)} >
-                                                                <img src={sub.image.secure_url} alt="subcategory" className="w-100" />
-                                                                <p className="text-muted fw-bolder bg-white p-2">{sub.name}</p>
-                                                            </Link>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-                                        })
+                                    <div className="my-2">
+                                        <h5 className="shadow-lg sub-shadow p-4 bg-white" >
+                                            {t("Who are we")}
+                                        </h5>
+                                        <div className="border-info-details p-2">
+                                            <p className="text-muted">
+                                                {t("details 1")}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="my-2">
+                                        <h5 className="shadow-lg sub-shadow p-4 bg-white" >
+                                            {t("About our work")}
+                                        </h5>
+                                        <div className="border-info-details p-2">
+                                            <p className="text-muted">
+                                                {t("details 2")}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="my-2">
+                                        <h5 className="shadow-lg sub-shadow p-4 bg-white" >
+                                            {t("Our Vision")}
+                                        </h5>
+                                        <div className="border-info-details p-2">
+                                            <p className="text-muted">
+                                                {t("details 3")}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div className="col-md-9 px-2 pe-lg-5 alkhaleej-category" dir={language === "ar" ? "rtl" : "ltr"}>
+                                    <h4 className="p-2 fw-bolder">{t("AllSubcategories")}</h4>
+                                    {
+                                        renderSubcategories
                                     }
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </Fragment> : <LoadingScreen />
             }
-
-        </div>
+        </main>
     )
 }
 

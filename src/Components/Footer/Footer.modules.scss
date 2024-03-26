@@ -1,14 +1,50 @@
-@media (max-width : 526px) {
+@media (max-width : 991px) {
     footer {
+        .form-control {
+            height: 100% !important;
+        }
+
         .btn-input {
-            input {
-                height: 50px;
-            }
 
             button {
                 padding: 5px;
                 font-size: 10px;
             }
         }
+
+        .last-part {
+            height: 20px;
+        }
+    }
+}
+
+@media (max-width : 380px) {
+    footer {
+        .call-us {
+            h5 {
+                font-size: 18px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+
+        .leftPart {
+            h6 {
+                font-size: 15px;
+            }
+        }
+
+        .btn-orange {
+            font-size: 1rem;
+            padding-right: 1.3rem;
+            padding-left: 1.3rem;
+        }
+
+        .btn-orange.w-25 {
+            width: 35% !important;
+        }
+
     }
 }

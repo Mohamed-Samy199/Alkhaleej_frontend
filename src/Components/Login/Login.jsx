@@ -1,12 +1,17 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from 'yup';
+import { CategoryContext } from "../Context/CategoryContext/Category";
+import { baseUrl } from "../../Utils/baseUrl";
+import "./Login.modules.scss";
+import LoginWithGoogleGmail from "../LoginWithGoogleGmail/LoginWithGoogleGmail";
 
 const Login = ({ saveUserData }) => {
+    const { t, language } = useContext(CategoryContext);
     const [loading, setLoading] = useState(false)
     let validationSchema = Yup.object({
         email: Yup.string().email().required(),
@@ -14,7 +19,7 @@ const Login = ({ saveUserData }) => {
 
     })
     const notify = (msg, type) => toast[type](msg);
-    const url = "http://localhost:5000/auth/login";
+    const url = `${baseUrl}/auth/login`;
     let navigate = useNavigate();
 
     let registerFormik = useFormik({
@@ -35,23 +40,29 @@ const Login = ({ saveUserData }) => {
                     navigate('/');
                 }
             }).catch((error) => {
-                if (error.response.status == 500) {
+                if (error) {
                     setLoading(false)
                     notify(error.response.data.message, 'error')
                 }
             })
         }
-    })
+    });
+
     return (
-        <div className="login">
+        <div className="login mt-6 pt-1">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Login</title>
+                <title>{t("Login")}</title>
             </Helmet>
-            <div className="w-50 my-5 mx-auto">
-                <h2>Login Now</h2>
+            <div className="w-75 my-5 mx-auto" dir={language === "ar" ? "rtl" : "ltr"}>
+                <h2>{t("Login Now")}</h2>
+                <div className="mb-4 text-center d-flex justify-content-center align-items-center flex-column gap-2 pb-4 position-relative" style={{borderBottom : "2px solid #ccc"}}>
+                    <h3 className="accuont" style={{color : "#8c89a0"}}>{t("Log in your account")}</h3>
+                    <LoginWithGoogleGmail saveUserData={saveUserData} />
+                    <div className="or-login position-absolute fw-bolder fs-5">{t("OR")}</div>
+                </div>
                 <form onSubmit={registerFormik.handleSubmit}>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">{t("Email")}</label>
                     <input type="email" value={registerFormik.values.email}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="email" name="email" className="form-control my-3" />
@@ -61,7 +72,7 @@ const Login = ({ saveUserData }) => {
                         </div> : ''
                     }
 
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{t("Password")}</label>
                     <input type="password" value={registerFormik.values.password}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="password" name="password" className="form-control my-3" />
@@ -72,7 +83,7 @@ const Login = ({ saveUserData }) => {
                     }
 
                     <button disabled={!(registerFormik.dirty && registerFormik.isValid && !loading)} className="btn btn-orange">
-                        {!loading ? "Login" : <i className="fas fa-spinner fa-spin"></i>}
+                        {!loading ? `${t("Login")}` : <i className="fas fa-spinner fa-spin"></i>}
                     </button>
                 </form>
             </div>

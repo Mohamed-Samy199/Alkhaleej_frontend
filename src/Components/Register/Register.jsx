@@ -1,12 +1,17 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from 'yup';
+import { CategoryContext } from "../Context/CategoryContext/Category";
+import { baseUrl } from "../../Utils/baseUrl";
+import "./Register.scss";
+import LoginWithGoogleGmail from "../LoginWithGoogleGmail/LoginWithGoogleGmail";
 
-const Register = () => {
+const Register = ({saveUserData}) => {
+    const { t, language } = useContext(CategoryContext);
     const [loading, setLoading] = useState(false)
     let validationSchema = Yup.object({
         userName: Yup.string().min(3).max(30).required(),
@@ -16,7 +21,7 @@ const Register = () => {
 
     })
     const notify = (msg, type) => toast[type](msg);
-    const url = "http://localhost:5000/auth/signup";
+    const url = `${baseUrl}/auth/signup`;
     let navigate = useNavigate();
 
     let registerFormik = useFormik({
@@ -37,7 +42,7 @@ const Register = () => {
                     navigate('/login');
                 }
             }).catch((error) => {
-                if (error.response.status == 409) {
+                if (error) {
                     setLoading(false)
                     notify(error.response.data.message, 'error')
                 }
@@ -46,15 +51,20 @@ const Register = () => {
     })
 
     return (
-        <div className="register">
+        <div className="register pt-1 mt-6">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Register</title>
+                <title>{t("Register")}</title>
             </Helmet>
-            <div className="w-50 my-5 mx-auto">
-                <h2>Register Now</h2>
+            <div className="w-75 my-5 mx-auto" dir={language === "ar" ? "rtl" : "ltr"}>
+                <h2>{t("Register Now")}</h2>
+                <div className="mb-4 text-center d-flex justify-content-center align-items-center flex-column gap-2 pb-4 position-relative" style={{borderBottom : "2px solid #ccc"}}>
+                    <h3 className="accuont" style={{color : "#8c89a0"}}>{t("Log in your account")}</h3>
+                    <LoginWithGoogleGmail saveUserData={saveUserData} />
+                    <div className="or-login position-absolute fw-bolder fs-5">{t("OR")}</div>
+                </div>
                 <form onSubmit={registerFormik.handleSubmit}>
-                    <label htmlFor="userName">Name</label>
+                    <label htmlFor="userName">{t("Name")}</label>
                     <input type="text" value={registerFormik.values.userName}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="userName" name="userName" className="form-control my-3" />
@@ -64,7 +74,7 @@ const Register = () => {
                         </div> : ''
                     }
 
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">{t("Email")}</label>
                     <input type="email" value={registerFormik.values.email}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="email" name="email" className="form-control my-3" />
@@ -74,7 +84,7 @@ const Register = () => {
                         </div> : ''
                     }
 
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{t("Password")}</label>
                     <input type="password" value={registerFormik.values.password}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="password" name="password" className="form-control my-3" />
@@ -84,7 +94,7 @@ const Register = () => {
                         </div> : ''
                     }
 
-                    <label htmlFor="cpassword">RePassword</label>
+                    <label htmlFor="cpassword">{t("RePassword")}</label>
                     <input type="password" value={registerFormik.values.cpassword}
                         onChange={registerFormik.handleChange} onBlur={registerFormik.handleBlur}
                         id="cpassword" name="cpassword" className="form-control my-3" />
@@ -94,8 +104,8 @@ const Register = () => {
                         </div> : ''
                     }
 
-                    <button disabled={!(registerFormik.dirty && registerFormik.isValid && !loading)} className="btn btn-orange">
-                        {!loading ? "Register" : <i className="fas fa-spinner fa-spin"></i>}
+                    <button type="submit" disabled={!(registerFormik.dirty && registerFormik.isValid && !loading)} className="btn btn-orange">
+                        {!loading ? `${t("Register")}` : <i className="fas fa-spinner fa-spin"></i>}
                     </button>
                 </form>
             </div>

@@ -1,27 +1,100 @@
 @import "../../index.scss";
 
-.screen {
-    width: 20rem !important;
-    border: 4px solid $gray;
-    border-radius: 15px;
-    background: linear-gradient(-45deg, #1f272b 0%,
-            #1f272b 50%,
-            #1b1f21 50%,
-            #1b1f21 100%);
+// .screen {
+//     width: 20rem !important;
+//     border: 4px solid $gray;
+//     border-radius: 15px;
+//     background: linear-gradient(-45deg, #1f272b 0%,
+//             #1f272b 50%,
+//             #1b1f21 50%,
+//             #1b1f21 100%);
 
-    .clock {
-        font-family: 'Orbitron', sans-serif;
-        color: $orang;
+//     .clock {
+//         font-family: 'Orbitron', sans-serif;
+//         color: $orang;
+//     }
+// }
+@media (max-width : 990px) {
+    .cart {
+        .mt-6 {
+            margin-top: 6.2rem !important;
+            padding-top: 8px;
+        }
+
     }
 }
 
-@media (max-width: 725px) {
+@media (max-width : 768px) {
+    .cart {
+        .frist-part {
+            justify-content: center !important;
 
-    .frist-part,
-    .second-part,
-    .therd-part {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+            .items-cart {
+                display: none;
+            }
+
+            .items {
+
+                h3,
+                h4 {
+                    font-size: 18px;
+                }
+
+                .btn {
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width : 445px) {
+    .cart {
+        .mt-6 {
+            margin-top: 4.2rem !important;
+            padding-top: 6px;
+        }
+
+        .second-part {
+            flex-direction: column;
+
+            .items {
+                margin-left: 2px !important;
+                margin-right: 2px !important;
+
+                .mx-5 {
+                    margin: 0 !important;
+                }
+
+                h4,
+                h5 {
+                    font-size: 14px;
+                }
+            }
+
+            .items-btn {
+                margin-top: 0.7rem;
+
+                .btn {
+                    padding-left: .7rem !important;
+                    padding-right: .7rem !important;
+                }
+            }
+        }
+
+        .therd-part {
+            .btn-orange {
+                font-size: 1rem;
+                padding-right: 1rem;
+                padding-left: 1rem;
+            }
+
+
+            h4 {
+                font-size: 16px;
+            }
+        }
     }
 }

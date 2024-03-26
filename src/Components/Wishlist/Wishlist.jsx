@@ -1,39 +1,46 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CategoryContext } from "../Context/CategoryContext/Category";
-import wishlist from "../Assets/empty_wishlist.png"
+import wishlist from "../Assets/empty_wishlist.png";
 import "./Wishlist.modules.scss";
 import { Helmet } from "react-helmet";
 
 const Wishlist = () => {
-    const { wishlistProducts, products } = useContext(CategoryContext);
+    const { wishlistProducts, products, t, language } = useContext(CategoryContext);
 
-    const commonElements = wishlistProducts ? products.filter((element) => wishlistProducts.includes(element._id)) : [];
+    const commonElements = wishlistProducts ? products?.filter((element) => wishlistProducts.includes(element._id)) : [];
     return (
-        <div className="wishlist my-5">
+        <div className="wishlist">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Wishlist</title>
+                <title>{t("Wishlist")}</title>
             </Helmet>
-            <div className="container">
-                <div className="row">
-                    <h3 className="border-bottom border-1 border-dark pb-4"><i className="fa-solid fa-basket-shopping me-2 main-color"></i> Wishlist</h3>
+            <div className="container mt-6">
+                <div className="row pt-4" dir={language === "ar" ? "rtl" : "ltr"}>
+                    <header>
+                        <h3 className="border-bottom border-1 border-dark pb-4">
+                            <i className="fa-solid fa-basket-shopping me-2 main-color"></i>
+                            {t("Wishlist")}
+                        </h3>
+                    </header>
                     {
                         commonElements && commonElements.length > 0 ? (
                             commonElements.map((prod) => (
-                                <div className="col-sm-12 col-md-4 col-lg-3 my-4" key={prod._id}>
+                                <div className="col-sm-12 col-md-4 col-lg-3 my-4" key={prod._id} >
                                     <Link to={`/product/${prod._id}`} className="nav-link mx-1">
                                         <div className="item shadow-lg bg-white d-flex justify-content-center align-items-center flex-column py-3">
                                             <div className="image-prod">
                                                 <img src={prod.mainImage.secure_url} alt="wishlist" className="w-100" />
                                             </div>
                                             <div className="text-center">
-                                                <h5 className="my-3 main-color">{prod.name}</h5>
+                                                <h5 className="my-3 main-color">
+                                                    {prod.translations[language] === "en" ? `${prod.name}` : `${prod.translations[language]}`}
+                                                </h5>
                                                 <div className="d-flex justify-content-between align-items-center">
-                                                    <h6 className="text-decoration-line-through">{prod.price}</h6>
+                                                    <h6 className="text-decoration-line-through">{prod.price === prod.finalPrice ? null : prod.price}</h6>
                                                     <h4 className="mx-3">
                                                         {prod.finalPrice}
-                                                        <span className="h6">EGP</span>
+                                                        <span className="h6">{t("EGP")}</span>
                                                     </h4>
                                                     <p>({prod.discount})%</p>
                                                 </div>

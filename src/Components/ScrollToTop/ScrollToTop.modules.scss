@@ -1,17 +1,24 @@
 .scroll-to-top-button {
     position: absolute;
     bottom: -1.5rem;
-    right: 47rem;
+    right: 50%;
     display: none;
     padding: 15px;
     background-color: #333;
     color: #fff;
     border: none;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 500;
     border-radius: 50%;
 }
 
 .scroll-to-top-button.visible {
     display: block;
+}
+
+@media (max-width : 405px) {
+    .scroll-to-top-button {
+        right: 41%;
+
+    }
 }

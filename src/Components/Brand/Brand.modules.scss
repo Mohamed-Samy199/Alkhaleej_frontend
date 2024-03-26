@@ -2,13 +2,14 @@
 
 .brands {
     .banner-one {
-        .col-md-3 {
+        .item {
             background-color: $gray;
             border-radius: 5px;
         }
     }
+
     .display-brand {
-        margin-top: 6rem;
+
         .brand-item {
             .m-2 {
                 border: .5px solid $gray;
@@ -26,5 +27,35 @@
         .col-md-3 {
             flex-direction: column;
         }
+    }
+}
+
+@media (max-width : 990px) {
+    .brands {
+        .mt-6 {
+            margin-top: 6.2rem !important;
+        }
+
+    }
+}
+
+@media (max-width : 445px) {
+    .brands {
+        .mt-6 {
+            margin-top: 4.2rem !important;
+        }
+
+        h3 {
+
+            span,
+            h1 {
+                font-size: 23px !important;
+            }
+        }
+
+    }
+
+    .type-word {
+        // visibility: hidden !important;
     }
 }

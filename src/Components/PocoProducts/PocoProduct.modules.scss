@@ -1,0 +1,25 @@
+@import "../../index.scss";
+
+.poco-product {
+    .text-center {
+        .d-flex {
+            h6 {
+                color: $gray !important ;
+            }
+
+            h4 {
+                border-bottom: 4px solid $orang !important;
+                padding-bottom: 5px !important;
+            }
+        }
+    }
+}
+
+@media (max-width : 782px) {
+    .poco-product {
+        padding-top: 5rem !important;
+        .row{
+            margin-right: 8px !important;
+        }
+    }
+}
