@@ -22,4 +22,4 @@ export default defineConfig({
 )}
 Create a manifest.json file in the root directory of your project.
 npm run build
-npx serve dist
+npx serve dist# Alkhaleej_frontend
